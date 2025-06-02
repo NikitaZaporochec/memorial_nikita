@@ -142,6 +142,8 @@
         Никита Запорожец
       </a>
     </h1>
+    <audio id="memorialAudio" src="src/obosralsya-nikita.mp3" preload="auto"></audio>
+    <div id="commentPrompt" style="font-size:1rem;color:#64748b;margin-bottom:0.5rem;"></div>
     <div class="dates" id="dates">2006 – 2025</div>
     <p class="memory" id="memoryText">
       Никита был человеком с большим сердцем и искренней улыбкой. Его доброта и поддержка вдохновляли окружающих, а чувство юмора делало каждый день светлее. Память о нем навсегда останется в наших сердцах и будет примером настоящей дружбы и человечности.
@@ -163,6 +165,8 @@
     const dates = document.getElementById('dates');
     const introTitle = document.getElementById('introTitle');
     const nameLink = document.getElementById('nameLink');
+    const commentPrompt = document.getElementById('commentPrompt');
+    const memorialAudio = document.getElementById('memorialAudio');
 
     const langData = {
       ru: {
@@ -171,7 +175,8 @@
         dates: '2006 – 2025',
         memory: 'Никита был человеком с большим сердцем и искренней улыбкой. Его доброта и поддержка вдохновляли окружающих, а чувство юмора делало каждый день светлее. Память о нем навсегда останется в наших сердцах и будет примером настоящей дружбы и человечности.',
         intro: 'Память о Никите Запорожце',
-        toggle: 'EN'
+        toggle: 'EN',
+        prompt: 'Нажмите на моё имя и, пожалуйста, напишите мне что-нибудь приятное'
       },
       en: {
         title: 'In Memory of Nikita Zaporochec',
@@ -179,7 +184,8 @@
         dates: '2006 – 2025',
         memory: 'Nikita was a person with a big heart and a sincere smile. His kindness and support inspired those around him, and his sense of humor made every day brighter. His memory will forever remain in our hearts and be an example of true friendship and humanity.',
         intro: 'In Memory of Nikita Zaporochec',
-        toggle: 'RU'
+        toggle: 'RU',
+        prompt: 'Click my name and leave a kind message, if you wish'
       }
     };
 
@@ -192,6 +198,7 @@
       memoryText.textContent = langData[lang].memory;
       introTitle.textContent = langData[lang].intro;
       langToggle.textContent = langData[lang].toggle;
+      commentPrompt.textContent = langData[lang].prompt;
       currentLang = lang;
     }
 
@@ -214,8 +221,22 @@
       }
     });
 
-    function openViewer(src, alt) {
+    mainPhoto.style.cursor = 'zoom-in';
+    mainPhoto.addEventListener('click', () => {
+      openViewer(mainPhoto.src, mainPhoto.alt, true);
+    });
+
+    nameLink.addEventListener('click', () => {
+      memorialAudio.currentTime = 0;
+      memorialAudio.play();
+    });
+
+    function openViewer(src, alt, fromMain = false) {
       if (document.getElementById('imageViewer')) return;
+      const galleryImages = Array.from(gallery.querySelectorAll('img'));
+      const images = [mainPhoto, ...galleryImages];
+      let currentIndex = images.findIndex(img => img.src === src);
+
       const overlay = document.createElement('div');
       overlay.id = 'imageViewer';
       overlay.className = 'fade-viewer';
@@ -247,18 +268,29 @@
         overlay.classList.add('visible');
       });
 
+      function showImage(index) {
+        if (index < 0) index = images.length - 1;
+        if (index >= images.length) index = 0;
+        currentIndex = index;
+        img.src = images[currentIndex].src;
+        img.alt = images[currentIndex].alt;
+      }
+
       function closeViewer() {
         overlay.classList.remove('visible');
-        document.removeEventListener('keydown', escListener);
+        document.removeEventListener('keydown', keyListener);
         overlay.addEventListener('transitionend', () => {
           overlay.remove();
         }, { once: true });
       }
       overlay.onclick = closeViewer;
-      function escListener(e) {
+
+      function keyListener(e) {
         if (e.key === 'Escape') closeViewer();
+        if (e.key === 'ArrowLeft') showImage(currentIndex - 1);
+        if (e.key === 'ArrowRight') showImage(currentIndex + 1);
       }
-      document.addEventListener('keydown', escListener);
+      document.addEventListener('keydown', keyListener);
     }
   </script>
 </body>
