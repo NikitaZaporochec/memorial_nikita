@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>In memory of Nikita Zaporochec</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: url('img/red_toilet_bg.png') center center/cover no-repeat, #e0e7ff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #1e293b;
+    }
+    .container {
+      background: #fff;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 32px rgba(30, 41, 59, 0.12);
+      padding: 3rem 2rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      opacity: 0;
+      transition: opacity 0.5s cubic-bezier(.4,0,.2,1);
+    }
+    .container.visible {
+      opacity: 1;
+    }
+    .avatar {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #6366f1;
+      background: #e0e7ff;
+    }
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 0;
+      color: #6366f1;
+    }
+    .dates {
+      font-size: 1.1rem;
+      color: #64748b;
+      margin-bottom: 1rem;
+    }
+    .memory {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .gallery {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .gallery img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 0.75rem;
+      border: 2px solid #e0e7ff;
+      background: #f1f5f9;
+      transition: transform 0.2s;
+    }
+    .gallery img:hover {
+      transform: scale(1.08);
+    }
+    .light {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(99, 102, 241, 0.12);
+      pointer-events: none;
+      z-index: 0;
+    }
+    @media (max-width: 500px) {
+      .container {
+        padding: 1.5rem 0.5rem;
+        max-width: 98vw;
+      }
+      .gallery img {
+        width: 50px;
+        height: 50px;
+      }
+    }
+    .fade-viewer {
+      opacity: 0;
+      transition: opacity 220ms cubic-bezier(.4,0,.2,1);
+    }
+    .fade-viewer.visible {
+      opacity: 1;
+    }
+    .intro-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #6366f1 0%, #e0e7ff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 1;
+      transition: opacity 0.7s cubic-bezier(.4,0,.2,1);
+    }
+    .intro-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .intro-title {
+      color: #fff;
+      font-size: 2.3rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-align: center;
+      text-shadow: 0 4px 32px rgba(30,41,59,0.18);
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="intro-overlay" id="introOverlay">
+    <div class="intro-title" id="introTitle">Память о Никите Запорожце</div>
+  </div>
+  <div class="light"></div>
+  <button id="langToggle" style="position:fixed;top:1.2rem;right:1.2rem;z-index:2100;background:#6366f1;color:#fff;font-size:1rem;padding:0.5rem 1.1rem;border:none;border-radius:0.7rem;cursor:pointer;transition:background 0.18s;">EN</button>
+  <main class="container" id="mainContainer">
+    <img src="img/nikitalox.jpg" alt="Nikita" class="avatar" id="mainPhoto">
+    <h1>
+      <a href="https://steamcommunity.com/profiles/76561198887776537" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;outline:none;transition:color 0.15s;" id="nameLink">
+        Никита Запорожец
+      </a>
+    </h1>
+    <div class="dates" id="dates">2006 – 2025</div>
+    <p class="memory" id="memoryText">
+      Никита был человеком с большим сердцем и искренней улыбкой. Его доброта и поддержка вдохновляли окружающих, а чувство юмора делало каждый день светлее. Память о нем навсегда останется в наших сердцах и будет примером настоящей дружбы и человечности.
+    </p>
+    <div class="gallery" id="gallery">
+      <img src="img/nikitalox2.jpg" alt="Memory 1">
+      <img src="img/nikitalox3.jpg" alt="Memory 2">
+      <img src="img/nikitalox4.jpg" alt="Memory 3">
+      <img src="img/nikita.jpeg" alt="Memory 4">
+    </div>
+  </main>
+  <script>
+    const gallery = document.getElementById('gallery');
+    const mainPhoto = document.getElementById('mainPhoto');
+    const introOverlay = document.getElementById('introOverlay');
+    const mainContainer = document.getElementById('mainContainer');
+    const langToggle = document.getElementById('langToggle');
+    const memoryText = document.getElementById('memoryText');
+    const dates = document.getElementById('dates');
+    const introTitle = document.getElementById('introTitle');
+    const nameLink = document.getElementById('nameLink');
+
+    const langData = {
+      ru: {
+        title: 'Память о Никите Запорожце',
+        name: 'Никита Запорожец',
+        dates: '2006 – 2025',
+        memory: 'Никита был человеком с большим сердцем и искренней улыбкой. Его доброта и поддержка вдохновляли окружающих, а чувство юмора делало каждый день светлее. Память о нем навсегда останется в наших сердцах и будет примером настоящей дружбы и человечности.',
+        intro: 'Память о Никиты Запорожце',
+        toggle: 'EN'
+      },
+      en: {
+        title: 'In Memory of Nikita Zaporochec',
+        name: 'Nikita Zaporochec',
+        dates: '2006 – 2025',
+        memory: 'Nikita was a person with a big heart and a sincere smile. His kindness and support inspired those around him, and his sense of humor made every day brighter. His memory will forever remain in our hearts and be an example of true friendship and humanity.',
+        intro: 'In Memory of Nikita Zaporochec',
+        toggle: 'RU'
+      }
+    };
+
+    let currentLang = 'ru';
+
+    function setLang(lang) {
+      document.title = langData[lang].title;
+      nameLink.textContent = langData[lang].name;
+      dates.textContent = langData[lang].dates;
+      memoryText.textContent = langData[lang].memory;
+      introTitle.textContent = langData[lang].intro;
+      langToggle.textContent = langData[lang].toggle;
+      currentLang = lang;
+    }
+
+    langToggle.onclick = () => {
+      setLang(currentLang === 'ru' ? 'en' : 'ru');
+    };
+
+    setLang('ru');
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        introOverlay.classList.add('hidden');
+        mainContainer.classList.add('visible');
+      }, 3000);
+    });
+
+    gallery.addEventListener('click', e => {
+      if (e.target.tagName === 'IMG') {
+        openViewer(e.target.src, e.target.alt);
+      }
+    });
+
+    function openViewer(src, alt) {
+      if (document.getElementById('imageViewer')) return;
+      const overlay = document.createElement('div');
+      overlay.id = 'imageViewer';
+      overlay.className = 'fade-viewer';
+      overlay.style.position = 'fixed';
+      overlay.style.top = 0;
+      overlay.style.left = 0;
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.background = 'rgba(30,41,59,0.92)';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.style.zIndex = 1000;
+      overlay.style.cursor = 'zoom-out';
+
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = alt;
+      img.style.maxWidth = '90vw';
+      img.style.maxHeight = '90vh';
+      img.style.borderRadius = '1rem';
+      img.style.boxShadow = '0 4px 32px rgba(0,0,0,0.25)';
+      img.style.background = '#fff';
+
+      overlay.appendChild(img);
+      document.body.appendChild(overlay);
+
+      requestAnimationFrame(() => {
+        overlay.classList.add('visible');
+      });
+
+      function closeViewer() {
+        overlay.classList.remove('visible');
+        document.removeEventListener('keydown', escListener);
+        overlay.addEventListener('transitionend', () => {
+          overlay.remove();
+        }, { once: true });
+      }
+      overlay.onclick = closeViewer;
+      function escListener(e) {
+        if (e.key === 'Escape') closeViewer();
+      }
+      document.addEventListener('keydown', escListener);
+    }
+  </script>
+</body>
+</html>
