@@ -260,8 +260,45 @@
       img.style.borderRadius = '1rem';
       img.style.boxShadow = '0 4px 32px rgba(0,0,0,0.25)';
       img.style.background = '#fff';
-
+      
+      const createArrow = (direction) => {
+        const arrow = document.createElement('div');
+        arrow.style.position = 'absolute';
+        arrow.style.top = '50%';
+        arrow.style.transform = 'translateY(-50%)';
+        arrow.style[direction === 'left' ? 'left' : 'right'] = '20px';
+        arrow.style.width = '50px';
+        arrow.style.height = '50px';
+        arrow.style.borderRadius = '50%';
+        arrow.style.background = 'rgba(255,255,255,0.15)';
+        arrow.style.display = 'flex';
+        arrow.style.alignItems = 'center';
+        arrow.style.justifyContent = 'center';
+        arrow.style.cursor = 'pointer';
+        arrow.style.fontSize = '24px';
+        arrow.style.color = 'white';
+        arrow.style.userSelect = 'none';
+        arrow.style.transition = 'background 0.2s';
+        arrow.textContent = direction === 'left' ? '←' : '→';
+        arrow.onclick = (e) => {
+          e.stopPropagation();
+          showImage(currentIndex + (direction === 'left' ? -1 : 1));
+        };
+        arrow.onmouseover = () => {
+          arrow.style.background = 'rgba(255,255,255,0.25)';
+        };
+        arrow.onmouseout = () => {
+          arrow.style.background = 'rgba(255,255,255,0.15)';
+        };
+        return arrow;
+      };
+      
+      const leftArrow = createArrow('left');
+      const rightArrow = createArrow('right');
+      
       overlay.appendChild(img);
+      overlay.appendChild(leftArrow);
+      overlay.appendChild(rightArrow);
       document.body.appendChild(overlay);
 
       requestAnimationFrame(() => {
