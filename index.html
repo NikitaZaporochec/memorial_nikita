@@ -18,21 +18,26 @@
       background: url('img/red_toilet_bg.png') center center/cover no-repeat, #e0e7ff;
       font-family: 'Segoe UI', Arial, sans-serif;
       color: #1e293b;
+      padding: 0;
+      box-sizing: border-box;
     }
     .container {
       background: #fff;
       border-radius: 1.5rem;
       box-shadow: 0 8px 32px rgba(30, 41, 59, 0.12);
-      padding: 3rem 2rem;
+      padding: 2rem 2rem;
       max-width: 420px;
       width: 100%;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2rem;
+      gap: 1rem;
       opacity: 0;
       transition: opacity 0.5s cubic-bezier(.4,0,.2,1);
+      margin: 3rem 0;
+      overflow-y: auto;
+      max-height: 90vh;
     }
     .container.visible {
       opacity: 1;
@@ -165,6 +170,20 @@
       <img src="img/happy_nikita2.jpg" alt="Memory 7">
       <img src="img/nikita_vstal2.jpg" alt="Memory 8">
     </div>
+
+    <h3 id="lostFootageTitle" style="margin-top: 2rem; color: #6366f1; font-size: 1.5rem;">Потерянные кадры о Никите</h3>
+    <div style="margin-top: 1rem; width: 100%; max-width: 100%;">
+      <iframe 
+        width="100%" 
+        height="230" 
+        src="https://www.youtube.com/embed/zpvg-vHGeNo" 
+        title="Потерянные кадры о Никите" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen
+        style="border-radius: 0.75rem; box-shadow: 0 4px 16px rgba(30, 41, 59, 0.08);">
+      </iframe>
+    </div>
   </main>
   <a id="otherWorksBtn" href="https://nikitazaporochec.github.io/business_card/" target="_blank" rel="noopener"
     style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:2100;background:#6366f1;color:#fff;font-size:1rem;padding:0.7rem 1.3rem;border:none;border-radius:0.8rem;box-shadow:0 2px 8px rgba(30,41,59,0.10);cursor:pointer;transition:background 0.18s;text-decoration:none;display:flex;align-items:center;gap:0.5rem;">
@@ -182,6 +201,7 @@
     const commentPrompt = document.getElementById('commentPrompt');
     const memorialAudio = document.getElementById('memorialAudio');
     const otherWorksBtn = document.getElementById('otherWorksBtn');
+    const lostFootageTitle = document.getElementById('lostFootageTitle');
 
     const langData = {
       ru: {
@@ -192,7 +212,8 @@
         intro: 'Память о Никите Запорожце',
         toggle: 'EN',
         prompt: 'Нажмите на моё имя и, пожалуйста, напишите мне что-нибудь приятное',
-        otherWorks: 'Мои другие работы'
+        otherWorks: 'Мои другие работы',
+        lostFootage: 'Потерянные кадры о Никите'
       },
       en: {
         title: 'In Memory of Nikita Zaporochec',
@@ -202,7 +223,8 @@
         intro: 'In Memory of Nikita Zaporochec',
         toggle: 'RU',
         prompt: 'Click my name and leave a kind message, if you wish',
-        otherWorks: 'Check out my other works'
+        otherWorks: 'Check out my other works',
+        lostFootage: 'Lost footage of Nikita'
       }
     };
 
@@ -217,6 +239,7 @@
       langToggle.textContent = langData[lang].toggle;
       commentPrompt.textContent = langData[lang].prompt;
       otherWorksBtn.textContent = langData[lang].otherWorks;
+      lostFootageTitle.textContent = langData[lang].lostFootage;
       currentLang = lang;
     }
 
